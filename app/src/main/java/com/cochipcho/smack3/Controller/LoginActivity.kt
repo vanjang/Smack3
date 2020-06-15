@@ -1,9 +1,10 @@
-package com.cochipcho.smack3
+package com.cochipcho.smack3.Controller
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.cochipcho.smack3.R
 
 class LoginActivity : AppCompatActivity() {
 

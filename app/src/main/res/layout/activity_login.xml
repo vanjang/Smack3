@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cochipcho.smack3.LoginActivity">
+    tools:context="com.cochipcho.smack3.Controller.LoginActivity">
 
     <EditText
         android:id="@+id/loginEmailText"
@@ -70,7 +70,7 @@
         android:layout_marginEnd="32dp"
         android:background="@color/colorPrimary"
         android:onClick="loginCreateUserButtonClicked"
-        android:text="CREATE USER"
+        android:text="SIGN UP HERE"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

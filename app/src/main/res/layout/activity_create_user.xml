@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cochipcho.smack3.CreateUserActivity">
+    tools:context="com.cochipcho.smack3.Controller.CreateUserActivity">
 
     <EditText
         android:id="@+id/createEmailText"
