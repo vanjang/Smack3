@@ -17,7 +17,7 @@
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:layout_constraintBottom_toTopOf="@+id/userLoginButtonNavHeader"
+        app:layout_constraintBottom_toTopOf="@+id/loginButtonNavHeader"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/profiledefault" />
 
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/nav_header_subtitle"
+        android:text="email@service.com"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/userImageNavHeader"
         app:layout_constraintTop_toBottomOf="@+id/userNameNavHeader" />
@@ -37,14 +37,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/nav_header_title"
+        android:text="name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/userImageNavHeader"
         app:layout_constraintTop_toTopOf="@+id/userImageNavHeader" />
 
     <Button
-        android:id="@+id/userLoginButtonNavHeader"
+        android:id="@+id/loginButtonNavHeader"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginStart="4dp"

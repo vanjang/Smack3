@@ -12,7 +12,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.cochipcho.smack3.R
 import com.cochipcho.smack3.Services.AuthService
 import com.cochipcho.smack3.Services.UserDataService
-import com.cochipcho.smack3.Utilities.BROACAST
+import com.cochipcho.smack3.Utilities.BROADCAST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_create_user.*
 import kotlin.random.Random
 
@@ -64,7 +64,6 @@ class CreateUserActivity : AppCompatActivity() {
         val username = createUsernameText.text.toString()
         val email = createEmailText.text.toString()
         val password = createPasswordText.text.toString()
-
         if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
             AuthService.registerUser(this, email, password) {
                 if (it) {
@@ -72,8 +71,7 @@ class CreateUserActivity : AppCompatActivity() {
                         if (it) {
                             AuthService.createUser(this, username, email, userAvatar, avatarColor) {
                                 if (it) {
-
-                                    val userDataChange = Intent(BROACAST)
+                                    val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
                                     LocalBroadcastManager.getInstance(this).sendBroadcast(userDataChange)
 
                                     enableSpinner(false)

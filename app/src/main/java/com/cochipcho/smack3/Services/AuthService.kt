@@ -93,6 +93,7 @@ object AuthService {
             try {
                 UserDataService.name = it.getString("name")
                 UserDataService.email = it.getString("email")
+                UserDataService.avatarName = it.getString("avatarName")
                 UserDataService.avatarColor = it.getString("avatarColor")
                 UserDataService.id = it.getString("_id")
                 complete(true)

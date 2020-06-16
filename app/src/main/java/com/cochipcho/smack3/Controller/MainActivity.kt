@@ -1,20 +1,24 @@
 package com.cochipcho.smack3.Controller
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Bundle
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.cochipcho.smack3.R
+import com.cochipcho.smack3.Services.AuthService
+import com.cochipcho.smack3.Services.UserDataService
+import com.cochipcho.smack3.Utilities.BROADCAST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,32 +30,32 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-//        val fab: FloatingActionButton = findViewById(R.id.fab)
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-//                R.id.nav_tools, R.id.nav_share, R.id.nav_send
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        val toggle = ActionBarDrawerToggle(
+            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver, IntentFilter(BROADCAST_USER_DATA_CHANGE))
+
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.main, menu)
-//        return true
-//    }
+    private val userDataChangeReceiver = object : BroadcastReceiver() {
+        // onReceive() called when it receives a broadcast
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (AuthService.isLoggedIn) {
+                userNameNavHeader.text = UserDataService.name
+                userEmailNavHeader.text = UserDataService.email
+
+                val resourceId = resources.getIdentifier(UserDataService.avatarName, "drawable", packageName)
+
+                println("resource id : ${resourceId}")
+
+                userImageNavHeader.setImageResource(resourceId)
+                userImageNavHeader.setBackgroundColor(UserDataService.returnAvatartColor(UserDataService.avatarColor))
+                loginButtonNavHeader.text = "Logout"
+            }
+        }
+    }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
@@ -62,19 +66,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
     fun loginButtonNavClicked(view: View) {
-        println("login button nav")
-        val loginIntent = Intent(this, LoginActivity::class.java)
-        startActivity(loginIntent)
+
+        if (AuthService.isLoggedIn) {
+            UserDataService.logout()
+            userNameNavHeader.text = "Login"
+            userEmailNavHeader.text = ""
+            userImageNavHeader.setImageResource(R.drawable.profiledefault)
+            userImageNavHeader.setBackgroundColor(Color.TRANSPARENT)
+            loginButtonNavHeader.text = "Login"
+        } else {
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            startActivity(loginIntent)
+        }
     }
 
     fun addChannelClicked(view: View) {
-        println("add channel button")
+
     }
 
     fun sendMessageButtonClicked(view: View) {
