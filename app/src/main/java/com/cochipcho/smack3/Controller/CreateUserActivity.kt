@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.cochipcho.smack3.R
 import com.cochipcho.smack3.Services.AuthService
+import com.cochipcho.smack3.Services.UserDataService
 import kotlinx.android.synthetic.main.activity_create_user.*
 import kotlin.random.Random
 
@@ -52,6 +53,7 @@ class CreateUserActivity : AppCompatActivity() {
 
     fun createUserClicked(view: View) {
 
+        val username = createUsernameText.text.toString()
         val email = createEmailText.text.toString()
         val password = createPasswordText.text.toString()
 
@@ -59,8 +61,14 @@ class CreateUserActivity : AppCompatActivity() {
             if (it) {
                 AuthService.loginUser(this, email, password) {
                     if (it) {
-                        println(AuthService.authToken)
-                        println(AuthService.userEmail)
+                        AuthService.createUser(this, username, email, userAvatar, avatarColor) {
+                            if (it) {
+                                println(UserDataService.avatarName)
+                                println(UserDataService.avatarColor)
+                                println(UserDataService.name)
+                                finish()
+                            }
+                        }
                     }
                 }
             }
