@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Message
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -16,13 +17,16 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.cochipcho.smack3.Model.Channel
 import com.cochipcho.smack3.R
 import com.cochipcho.smack3.R.layout.add_channel_dialog
 import com.cochipcho.smack3.Services.AuthService
+import com.cochipcho.smack3.Services.MessageService
 import com.cochipcho.smack3.Services.UserDataService
 import com.cochipcho.smack3.Utilities.BROADCAST_USER_DATA_CHANGE
 import com.cochipcho.smack3.Utilities.SOCKET_URL
 import io.socket.client.IO
+import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        socket.connect()
+        socket.on("channelCreated", onNewChannel )
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -50,17 +56,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
             IntentFilter(BROADCAST_USER_DATA_CHANGE))
-        socket.connect()
         super.onResume()
     }
 
-//    override fun onPause() {
-//        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
-//        super.onPause()
-//    }
-
     override fun onDestroy() {
         socket.disconnect()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
         super.onDestroy()
     }
 
@@ -129,6 +130,20 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
 
+        }
+    }
+
+    private val onNewChannel = Emitter.Listener {
+        runOnUiThread {
+            val channelName = it[0] as String
+            val channelDescription = it[1] as String
+            val channelId = it[2] as String
+
+            val newChannel = Channel(channelName, channelDescription, channelId)
+            MessageService.channels.add(newChannel)
+            println(newChannel.name)
+            println(newChannel.description)
+            println(newChannel.id)
         }
     }
 
