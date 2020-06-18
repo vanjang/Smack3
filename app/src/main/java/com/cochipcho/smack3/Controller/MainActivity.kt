@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         socket.connect()
         socket.on("channelCreated", onNewChannel )
+        socket.on("messageCreated", onNewMessage)
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -117,7 +118,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateWithChannel() {
-        mainChannelLogin.text = "${selectedChannel?.name}"
+        mainChannelLogin.text = "#${selectedChannel?.name}"
         // download messages for channel
     }
 
@@ -185,8 +186,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun sendMessageButtonClicked(view: View) {
+    private val onNewMessage = Emitter.Listener {
+        runOnUiThread {
+            val messageBody = it[0] as String
+            val channelId =  it[2] as String
+            val username = it[3] as String
+            val userAvatar = it[4] as String
+            val userAvatarColor = it[5] as String
+            val id = it[6] as String
+            val timestamp = it[7] as String
 
+            val newMessage = com.cochipcho.smack3.Model.Message(messageBody, username, channelId, userAvatar, userAvatarColor, id, timestamp)
+            MessageService.messages.add(newMessage)
+            println(newMessage.message)
+        }
+    }
+
+    fun sendMessageButtonClicked(view: View) {
+        if (App.prefs.isLoggedIn && messageTextField.text.isNotEmpty() && selectedChannel != null) {
+            val userId = UserDataService.id
+            val channelId = selectedChannel!!.id
+            socket.emit("newMessage", messageTextField.text.toString(), userId, channelId, UserDataService.name, UserDataService.avatarName, UserDataService.avatarColor)
+            messageTextField.text.clear()
+            hideKeyboard()
+        }
     }
 
     fun hideKeyboard() {
