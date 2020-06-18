@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/messageUserImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/dark19" />
+
+    <TextView
+        android:id="@+id/messageUsernameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/messageUserImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Myung Hoon So" />
+
+    <TextView
+        android:id="@+id/timestampLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/messageUsernameLabel"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="June 18th 2020 14:42PM" />
+
+    <TextView
+        android:id="@+id/messageBodyLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/messageUserImage"
+        app:layout_constraintTop_toBottomOf="@+id/timestampLabel"
+        tools:text="※ 클럽 경력 (영문 위키 기준)  1956-1973 맨체스터 유나이티드 758경기 249골 (맨체스터 유나이티드 역대 득점 2위) 1974-1977 프레스턴 노스 엔드 45경기 10골 1976 워터포드 유나이티드 4경기 1골  * 맨체스터 유나이티드 잉글랜드 1부리그 우승 : 1956-57, 1964-65, 1966-67 FA컵 우승 : 1962-63 채리티 실드 우승 : 1956, 1957(모두 단독), 1965, 1967(모두 공동) 유러피언 챔피언스 클럽컵 우승 : 1967-68 (FA 유스컵 우승 : 1953-54, 1954-55, 1955-56)" />
+</androidx.constraintlayout.widget.ConstraintLayout>
