@@ -120,6 +120,16 @@ class MainActivity : AppCompatActivity() {
     fun updateWithChannel() {
         mainChannelLogin.text = "#${selectedChannel?.name}"
         // download messages for channel
+        if (selectedChannel != null) {
+            MessageService.getMessages(selectedChannel!!.id) {
+                if (it) {
+                    for (message in MessageService.messages) {
+                        println(message.message)
+                    }
+                }
+            }
+        }
+
     }
 
     override fun onBackPressed() {
@@ -173,32 +183,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val onNewChannel = Emitter.Listener {
-        runOnUiThread {
-            val channelName = it[0] as String
-            val channelDescription = it[1] as String
-            val channelId = it[2] as String
+        if (App.prefs.isLoggedIn) {
+            runOnUiThread {
+                val channelName = it[0] as String
+                val channelDescription = it[1] as String
+                val channelId = it[2] as String
 
-            val newChannel = Channel(channelName, channelDescription, channelId)
-            MessageService.channels.add(newChannel)
+                val newChannel = Channel(channelName, channelDescription, channelId)
+                MessageService.channels.add(newChannel)
 
-            channelAdapter.notifyDataSetChanged()
-
+                channelAdapter.notifyDataSetChanged()
+            }
         }
     }
 
     private val onNewMessage = Emitter.Listener {
-        runOnUiThread {
-            val messageBody = it[0] as String
-            val channelId =  it[2] as String
-            val username = it[3] as String
-            val userAvatar = it[4] as String
-            val userAvatarColor = it[5] as String
-            val id = it[6] as String
-            val timestamp = it[7] as String
+        if (App.prefs.isLoggedIn) {
+            runOnUiThread {
+                val channelId =  it[2] as String
+                if (channelId == selectedChannel?.id) {
+                    val messageBody = it[0] as String
+                    val username = it[3] as String
+                    val userAvatar = it[4] as String
+                    val userAvatarColor = it[5] as String
+                    val id = it[6] as String
+                    val timestamp = it[7] as String
 
-            val newMessage = com.cochipcho.smack3.Model.Message(messageBody, username, channelId, userAvatar, userAvatarColor, id, timestamp)
-            MessageService.messages.add(newMessage)
-            println(newMessage.message)
+                    val newMessage = com.cochipcho.smack3.Model.Message(messageBody, username, channelId, userAvatar, userAvatarColor, id, timestamp)
+                    MessageService.messages.add(newMessage)
+                }
+            }
+
         }
     }
 
